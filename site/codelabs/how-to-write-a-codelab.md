@@ -250,6 +250,9 @@ snarkjs setup -c circuit.json --protocol groth
 snarkjs verify
 ```
 
+![circom](./assets/circom_compilation.png)
+
+
 ## Part-1 Challenge
 
 duration: 3
@@ -827,6 +830,7 @@ snarkjs setup -c circuit.json --protocol groth
 snarkjs verify
 ```
 
+
 <!-- ------------------------ -->
 
 ## Prove on-chain
@@ -838,3 +842,76 @@ snarkjs verify
 Processing multiple transactions requires us to update the `accounts_root` many times before we arrive at the final one. This means we have to pre-compute all the `intermediate_roots` and pass them to the circuit to use in validating Merkle proofs.
 
 Check out https://github.com/rollupnc/RollupNC/blob/master/snark_circuit/multiple_tokens_transfer_and_withdraw.circom to see how it was implemented.
+
+## Math (optional)
+
+This section briefly describes the Groth16 zk-SNARK protocol, 
+and why it works.
+
+This schematic shows how we transform the computation.
+
+| Computation |
+| ----------- |
+| Arithmetic Circuit |
+| Rank 1 Constraint System | 
+| Quadratic Arithmetic Program |
+| Non-interactive Linear Proof |
+| SNARK |
+
+### Arithmetic Circuit
+
+![circuit](./assets/circuit.png)
+
+The first step is to convert whatever problem on hand into 
+a form that can be checked by an arithmetic circuit 
+(something with inputs to addition and multiplication gates only).
+The circuit in the above diagram allows Alice to prove to 
+Bob that she knows some c\_1, c\_2 and c\_3 such that 
+(c\_1.c\_2).(c\_1+c\_3) = 7.
+
+### Rank 1 Constraint System
+
+The next step is to convert each gate to a constraint
+
+The variables are as follows:
+n: num. multiplication gates (constraints)
+m: num. inputs to the circuit
+u: left input, v: right input, w: output
+For example: variable mapping is:
+(one, c_1, c_2, c_3, c_1.c_2, c_1+c_3)
+u_1 = (0, 1, 0, 0, 0, 0)
+v_1 = (0, 0, 1, 0, 0, 0)
+w_1 = (0, 0, 0, 0, 1, 0)
+
+(note that the first variable 
+
+$$
+\left(\sum_{i=0}^m a_i u_{i,q}\right)
+\left(\sum_{i=0}^m a_i v_{i,q}\right)
+=
+\left(\sum_{i=0}^m a_i w_{i,q}\right)
+$$
+
+
+
+A more sophisticated example is from the comparator 
+example in the directory. Try compiling 
+
+```bash
+- $ cd 5_comparator
+- $ cp force_equal_if_enabled.circom circuit.circom 
+- $ circom circuit.circom
+- $ snarkjs printconstraints
+```
+
+Can you draw a diagram of the circuit represented by the 
+three constraints?
+
+### Quadratic Arithmetic Program
+
+### Non-interactive linear proof
+
+### SNARK
+
+
+
