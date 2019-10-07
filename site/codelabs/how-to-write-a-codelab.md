@@ -16,14 +16,14 @@ Duration: 1
 
 ### What you'll build
 
-We will attempt to create circuits and contract for rollup chain that does ether/ERC20 transfers and is much more scalable than current ethereum chain from scratch!
+We will attempt to create circuits and contracts for a rollup chain that does ether/ERC20 transfers and is much more scalable than the current ethereum chain from scratch!
 
 ### What you'll learn
 
 - How to create circuits using snarkjs and circom 🤗
-- How to implement simple arithematic constraints 😀
+- How to implement simple arithmetic constraints 😀
 - How to verify signatures inside circuits 🎉
-- How to verify merkel proofs of inclusion 🎊
+- How to verify Merkle proofs of inclusion 🎊
 - How to process transactions for zkRollup inside a circuit ❤️
 - Creating snark proofs for transaction batch 😇
 - Submitting proofs on chain! 🤩
@@ -54,17 +54,48 @@ cd circomlib; git checkout 77928872169b7179c9eee545afe0a972d15b1e64; npm i;  cd 
 
 That's it!
 
-## ZkSnark -- The Moon Math
+## What zk-SNARKs do
 
-< Brief up about zkSnarks>
-< Relavent links to learn more >
-< How much are we going to use in this workshop >
+zk-SNARK is short for 
+Zero-Knowledge Succinct Non-Interactive Argument of Knowledge.
+
+### zero-knowledge Argument of Knowledge
+A Prover convinces a Verifier that they know certain 
+information that satisfies a function without revealing
+that information
+
+### non-interactive
+
+Only a single message from Prover to Verifier needed 
+(no challenge-response needed)
+
+### succinct
+
+The verifier only needs to process a 
+"computationally light" argument
+
+## Additional Resources
+
+Groth16 construction:
+https://eprint.iacr.org/2016/260.pdf
+
+Pinocchio construction:
+https://eprint.iacr.org/2013/279.pdf 
+
+Explainers: 
+https://medium.com/@VitalikButerin/zk-snarks-under-the-hood-b33151a013f6 
+http://chriseth.github.io/notes/articles/zksnarks/zksnarks.pdf)
+https://electriccoin.co/blog/snark-explain/
+https://medium.com/@VitalikButerin/quadratic-arithmetic-programs-from-zero-to-hero-f6d558cea649
+
+We can briefly discuss the Groth16 paper at the end of the workshop.
+Warning: The math behind elliptic curves pairings is very rich.
 
 ## ZkRollup in a nutshell
 
-ZkSnarks have been used for privacy applications and for having private transactions on chains like ZCash for a few years now. Rollup utilises zkSnarks to scale ethereum by taking advantage of the succinctness and privacy provided by snarks.
+zk-SNARKs have been used for privacy applications and for having private transactions on chains like ZCash for a few years now. Rollup utilises zk-SNARKs to scale Ethereum by taking advantage of the succinctness and privacy provided by snarks.
 
-We achive scalability by not having to send user signatures on-chain and instead send one proof which signifies 1000's of signature verifications and other transaction validation checks have been done correctly off-chain.
+We achieve scalability by not having to send user signatures on-chain and instead send one proof which signifies 1000's of signature verifications and other transaction validation checks have been done correctly off-chain.
 
 We send minified form of transactions on-chain as input to circuit to have data-available.
 
@@ -72,11 +103,11 @@ We send minified form of transactions on-chain as input to circuit to have data-
 
 There are two actors involved in a rollup chain: Coordinator and User.
 
-- We maintain account merkel tree on chain which can be updated by sending snark proof.
+- We maintain account Merkle tree on chain which can be updated by sending SNARK proof.
 - Users sends transaction to coordinator with signatures via RPC/API's.
-- Coordinator collects all the transactions and creates a batch which is processed by the snark circuit, if the circuit finds all transactions in the batch to be valid it emits a proof.
+- Coordinator collects all the transactions and creates a batch which is processed by the SNARK circuit, if the circuit finds all transactions in the batch to be valid it emits a proof.
 - This validity proof will be submitted and verified on chain which signifies that state was updated properly off-chain.
-- This updates the onchain account merkel tree.
+- This updates the onchain account Merkle tree.
 
 > We will dive into specifics of the construction in the next parts.
 
@@ -90,7 +121,7 @@ There are two actors involved in a rollup chain: Coordinator and User.
 
 <!-- ------------------------ -->
 
-## Using Circom and Snarkjs
+## Using circom and snarkjs
 
 Duration: 2
 
